@@ -1,0 +1,41 @@
+src/
+├── app/
+│   ├── (auth)/
+│   │   ├── signin/
+│   │   └── signup/
+│   ├── (dashboard)/
+│   │   ├── dashboard/
+│   │   ├── leaderboard/
+│   │   ├── teams/
+│   │   └── achievements/
+│   ├── api/
+│   │   ├── auth/
+│   │   ├── cycling-logs/
+│   │   └── leaderboard/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/
+│   ├── auth/
+│   ├── dashboard/
+│   └── layout/
+├── lib/
+│   ├── prisma.ts
+│   ├── utils.ts
+│   └── validations.ts
+└── types/
+    └── index.ts
+
+
+Next Steps:
+
+1. Authentication Setup: Implement sign-up/sign-in pages
+2. Dashboard Creation: Build main dashboard with cycling log entry
+3. Leaderboard Implementation: Create ranking system with filters
+4. Team Management: Add team creation and management features
+5. Achievement System: Implement achievement tracking and notifications
+6. Company Admin Panel: Build subscription and employee management
+7. API Integration: Add Strava/fitness app integrations
+8. Testing: Add unit and integration tests
+9. Deployment: Deploy to Vercel/Railway with production database
