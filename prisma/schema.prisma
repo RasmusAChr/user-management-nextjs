@@ -50,8 +50,6 @@ model User {
   gender      Gender
   phoneNumber String
   country     String
-  language    String
-  timezone    String
   bio         String
   website     String
   socialLinks SocialLink[]
