@@ -14,56 +14,84 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  UNSPECIFIED
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  BANNED
+  SUSPENDED
+}
+
+enum SocialLinkType {
+  FACEBOOK
+  TWITTER
+  GITHUB
+  LINKEDIN
+  INSTAGRAM
+  YOUTUBE
+  TIKTOK
+  OTHER
+}
+
 model User {
-  id                  Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   /// Personal Information
-  username            String   @unique
-  email               String   @unique
-  firstName           String
-  lastName            String
-  gender              String
-  phoneNumber         String
-  country             String
-  language            String
-  timezone            String
-  bio                 String
-  website             String
-  socialLinks         Json
+  username    String @unique
+  email       String @unique
+  firstName   String
+  lastName    String
+  gender      Gender
+  phoneNumber String
+  country     String
+  language    String
+  timezone    String
+  bio         String
+  website     String
+  socialLinks SocialLink[]
 
   /// Media
-  userImage           String?
+  userImageURI String?
 
   /// Tracking
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-  lastSeen            DateTime?
-  isOnline            Boolean?
-  status              String   @default("active")
-
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  lastSeen  DateTime?
+  isOnline  Boolean?
+  status    Status    @default(ACTIVE)
 
   /// Grouping
-  groups              Group[]  @relation("UserGroups")
-  teamId              Int?
-  team                Team?    @relation(fields: [teamId], references: [id])
-  roleId              Int?
-  role                Role?    @relation(fields: [roleId], references: [id])
-
+  groups Group[] @relation("UserGroups")
+  teamId Int?
+  team   Team?   @relation(fields: [teamId], references: [id])
+  roleId Int?
+  role   Role?   @relation(fields: [roleId], references: [id])
 
   /// Authentication & Security
-  emailVerified       Boolean  @default(false)
-  twoFactorEnabled    Boolean  @default(false)
-  lastLogin           DateTime
-  loginAttempts       Int      @default(0)
-  locked              Boolean  @default(false)
-  passwordChangedAt   DateTime
-  resetToken          String?
-  resetTokenExpiry    DateTime?
+  emailVerified    Boolean @default(false)
+  twoFactorEnabled Boolean @default(false)
+
+  lastLogin       DateTime
+  lastFailedLogin DateTime?
+  loginAttempts   Int       @default(0)
+  lockedAt        DateTime?
+  locked          Boolean   @default(false)
+
+  passwordHash    String
+  passwordChangedAt DateTime
+  resetToken        String?
+  resetTokenExpiry  DateTime?
 
   /// Legals
-  termsAcceptedAt     DateTime?
+  termsAcceptedAt         DateTime?
   privacyPolicyAcceptedAt DateTime?
-  ageConfirmed        Boolean?
+  ageConfirmed            Boolean?
 
 }
 
@@ -76,15 +104,23 @@ model Group {
 }
 
 model Team {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
   users     User[]
   createdAt DateTime @default(now())
 }
 
 model Role {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
   users     User[]
   createdAt DateTime @default(now())
+}
+
+model SocialLink {
+  id     Int    @id @default(autoincrement())
+  user   User   @relation(fields: [id], references: [id])
+  userId Int
+  type   SocialLinkType
+  url    String
 }
