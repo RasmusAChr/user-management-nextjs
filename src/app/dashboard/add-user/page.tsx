@@ -40,13 +40,19 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 px-4">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-20" style={{
-                backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(156,163,175,0.3) 1px, transparent 0)',
-                backgroundSize: '20px 20px'
-            }}></div>
             
             <div className="relative z-10 max-w-2xl mx-auto">
+                {/* Back Button */}
+                <Link
+                    href="/dashboard"
+                    aria-label="Back to dashboard"
+                    className="absolute -top-0 -left-0 inline-flex items-center gap-1 rounded-full px-3 py-2 bg-white/90 backdrop-blur border border-gray-200 text-xs font-medium text-gray-600 shadow-sm hover:text-gray-900 hover:bg-white transition-colors"
+                >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back
+                </Link>
                 {/* Header */}
                 <div className="text-center mb-8">
                     <div className="mb-6 inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg border border-gray-200">
@@ -55,10 +61,10 @@ export default function App() {
                         </svg>
                     </div>
                     <h1 className="text-4xl font-extralight text-gray-900 mb-3 tracking-tight">
-                        Add New User
+                        Create User
                     </h1>
                     <p className="text-gray-600 text-lg font-light">
-                        Create a new user account with complete information
+                        Fill in the details below to add a new member to your system
                     </p>
                 </div>
 
