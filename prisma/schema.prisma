@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
-  //output   = "../node_modules/.prisma/client"
+  provider = "prisma-client"
+  output   = "../src/generated/"
   engineType = "client"
 }
 
@@ -50,70 +50,70 @@ model User {
   gender      Gender
   phoneNumber String
   country     String
-  bio         String
-  website     String
+  bio         String?
+  website     String?
   socialLinks SocialLink[]
 
   /// Media
-  userImageURI String?
+  // userImageURI String?
 
   /// Tracking
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  lastSeen  DateTime?
-  isOnline  Boolean?
-  status    Status    @default(ACTIVE)
+  // updatedAt DateTime  @updatedAt
+  // lastSeen  DateTime?
+  // isOnline  Boolean?
+  // status    Status    @default(ACTIVE)
 
   /// Grouping
-  groups Group[] @relation("UserGroups")
-  teamId Int?
-  team   Team?   @relation(fields: [teamId], references: [id])
-  roleId Int?
-  role   Role?   @relation(fields: [roleId], references: [id])
+  // groups Group[] @relation("UserGroups")
+  // teamId Int?
+  // team   Team?   @relation(fields: [teamId], references: [id])
+  // roleId Int?
+  // role   Role?   @relation(fields: [roleId], references: [id])
 
   /// Authentication & Security
-  emailVerified    Boolean @default(false)
-  twoFactorEnabled Boolean @default(false)
+  // emailVerified    Boolean @default(false)
+  // twoFactorEnabled Boolean @default(false)
 
-  lastLogin       DateTime
-  lastFailedLogin DateTime?
-  loginAttempts   Int       @default(0)
-  lockedAt        DateTime?
-  locked          Boolean   @default(false)
+  // lastLogin       DateTime
+  // lastFailedLogin DateTime?
+  // loginAttempts   Int       @default(0)
+  // lockedAt        DateTime?
+  // locked          Boolean   @default(false)
 
   passwordHash    String
-  passwordChangedAt DateTime
-  resetToken        String?
-  resetTokenExpiry  DateTime?
+  // passwordChangedAt DateTime
+  // resetToken        String?
+  // resetTokenExpiry  DateTime?
 
   /// Legals
-  termsAcceptedAt         DateTime?
-  privacyPolicyAcceptedAt DateTime?
-  ageConfirmed            Boolean?
+  // termsAcceptedAt         DateTime?
+  // privacyPolicyAcceptedAt DateTime?
+  // ageConfirmed            Boolean?
 
 }
 
-model Group {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String?
-  createdAt   DateTime @default(now())
-  users       User[]   @relation("UserGroups")
-}
+// model Group {
+//   id          Int      @id @default(autoincrement())
+//   name        String   @unique
+//   description String?
+//   createdAt   DateTime @default(now())
+//   users       User[]   @relation("UserGroups")
+// }
 
-model Team {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  users     User[]
-  createdAt DateTime @default(now())
-}
+// model Team {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   users     User[]
+//   createdAt DateTime @default(now())
+// }
 
-model Role {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  users     User[]
-  createdAt DateTime @default(now())
-}
+// model Role {
+//   id        Int      @id @default(autoincrement())
+//   name      String   @unique
+//   users     User[]
+//   createdAt DateTime @default(now())
+// }
 
 model SocialLink {
   id     Int    @id @default(autoincrement())

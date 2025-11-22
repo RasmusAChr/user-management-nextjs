@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import countries from '@/data/countries.json';
 import Link from 'next/link';
+import { RegisterUserFormData, genderOptions } from '@/types/user';
+import { createUser } from '@/services/userService';
 
 export default function App() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<RegisterUserFormData>({
         username: '',
         email: '',
         firstName: '',
@@ -23,10 +25,17 @@ export default function App() {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log('User data:', formData);
         // Handle form submission here
+        try {
+            const created = await createUser(formData);
+            console.log('User created successfully:', created);
+        } catch (error) {
+            console.error('Error creating user:', error);
+        }
+
     };
 
     return (
@@ -154,10 +163,11 @@ export default function App() {
                                     required
                                 >
                                     <option value="">Select gender</option>
-                                    <option value="MALE">Male</option>
-                                    <option value="FEMALE">Female</option>
-                                    <option value="OTHER">Other</option>
-                                    <option value="UNSPECIFIED">Prefer not to say</option>
+                                    {genderOptions.map((option) => (
+                                        <option key={option.value} value={option.value}>
+                                            {option.label}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
