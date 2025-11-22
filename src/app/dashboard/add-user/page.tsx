@@ -4,6 +4,7 @@ import countries from '@/data/countries.json';
 import Link from 'next/link';
 import { RegisterUserFormData, genderOptions } from '@/types/user';
 import { createUser } from '@/services/userService';
+import Modal from '@/components/modal';
 
 export default function App() {
     const [formData, setFormData] = useState<RegisterUserFormData>({
@@ -15,6 +16,13 @@ export default function App() {
         phoneNumber: '',
         country: '',
         password: ''
+    });
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalConfig, setModalConfig] = useState({
+        title: '',
+        description: '',
+        type: 'info' as 'success' | 'error' | 'info'
     });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -32,15 +40,34 @@ export default function App() {
         try {
             const created = await createUser(formData);
             console.log('User created successfully:', created);
+            setModalConfig({
+                title: 'Success!',
+                description: 'The user has been created successfully and added to the system.',
+                type: 'success'
+            });
+            setIsModalOpen(true);
         } catch (error) {
             console.error('Error creating user:', error);
+            setModalConfig({
+                title: 'Error',
+                description: 'Failed to create user. Please check your information and try again.',
+                type: 'error'
+            });
+            setIsModalOpen(true);
         }
 
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-gray-100 py-8 px-4">
-            
+            <Modal 
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                title={modalConfig.title}
+                description={modalConfig.description}
+                type={modalConfig.type}
+            />
+
             <div className="relative z-10 max-w-2xl mx-auto">
                 {/* Back Button */}
                 <Link
