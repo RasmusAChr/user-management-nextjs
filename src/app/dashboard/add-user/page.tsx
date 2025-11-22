@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { RegisterUserFormData, genderOptions } from '@/types/user';
 import { createUser } from '@/services/userService';
 import Modal from '@/components/modal';
+import { hasCorrectEmailFormat } from '@/lib/utils';
 
 export default function App() {
     const [formData, setFormData] = useState<RegisterUserFormData>({
@@ -33,29 +34,32 @@ export default function App() {
         }));
     };
 
+    // Form validation: all fields must be filled and email must be valid
+    const isFormValid = hasCorrectEmailFormat(formData.email.trim()) && Object.values(formData).every(val => String(val).trim() !== '');
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('User data:', formData);
-        // Handle form submission here
+
+        // Prevent submission if form is invalid (should not happen due to button disable)
+        if (!isFormValid) return;
+        
         try {
             const created = await createUser(formData);
-            console.log('User created successfully:', created);
             setModalConfig({
-                title: 'Success!',
+                title: 'Successfully Created User',
                 description: 'The user has been created successfully and added to the system.',
                 type: 'success'
             });
             setIsModalOpen(true);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error creating user:', error);
             setModalConfig({
                 title: 'Error',
-                description: 'Failed to create user. Please check your information and try again.',
+                description: error.message,
                 type: 'error'
             });
             setIsModalOpen(true);
         }
-
     };
 
     return (
@@ -67,8 +71,7 @@ export default function App() {
                 description={modalConfig.description}
                 type={modalConfig.type}
             />
-
-            <div className="relative z-10 max-w-2xl mx-auto">
+            <form onSubmit={handleSubmit} noValidate className="relative z-10 max-w-2xl mx-auto">
                 {/* Back Button */}
                 <Link
                     href="/dashboard"
@@ -261,16 +264,21 @@ export default function App() {
                                 </button>
                             </Link>
                             <button
-                                type="button"
-                                onClick={handleSubmit}
-                                className="px-8 py-3 bg-gray-900 text-white rounded-xl font-medium hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0 cursor-pointer text-gray-900 placeholder-gray-500"
+                                type="submit"
+                                disabled={!isFormValid} // Disable submit button if form is invalid
+                                aria-disabled={!isFormValid}
+                                className={`px-8 py-3 rounded-xl font-medium transition-all duration-200 active:translate-y-0 text-white ${
+                                    isFormValid
+                                        ? 'bg-gray-900 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 cursor-pointer'
+                                        : 'bg-gray-300 cursor-not-allowed'
+                                }`}
                             >
-                                Add User
+                                {isFormValid ? 'Add User' : 'Fill all fields'}
                             </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

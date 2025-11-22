@@ -5,7 +5,22 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
     try {
         const data = await request.json();
-        
+
+        // Throw an error if user with username or email already exists
+        const existingUser = await prisma.user.findFirst({
+            where: {
+                OR: [
+                    { username: data.username },
+                    { email: data.email }
+                ]
+            }
+        });
+
+        if (existingUser) {
+            return NextResponse.json({ error: 'User with this username or email already exists' }, { status: 409 });
+        }
+
+        // Hash the password before storing
         const hashedPassword = await bcrypt.hash(data.password, 12);
 
         const user = await prisma.user.create({

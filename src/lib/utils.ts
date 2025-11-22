@@ -31,3 +31,9 @@ export function getWeekStart(date: Date): Date {
 export function getMonthStart(date: Date): Date {
     return new Date(date.getFullYear(), date.getMonth(), 1)
 }
+
+// Validate that an email has the correct format (e.g., contains "@" and a domain)
+export function hasCorrectEmailFormat(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}

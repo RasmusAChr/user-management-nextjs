@@ -8,7 +8,8 @@ export async function createUser(data: RegisterUserFormData) {
     });
 
     if (!response.ok) {
-        throw new Error('Failed to create user: ' + response.statusText);
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorData.message || response.statusText);
     }
     return response.json();
 }
