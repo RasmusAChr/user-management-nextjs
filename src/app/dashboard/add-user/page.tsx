@@ -2,18 +2,19 @@
 import { useState } from 'react';
 import countries from '@/data/countries.json';
 import Link from 'next/link';
-import { RegisterUserFormData, genderOptions } from '@/types/user';
+import { Gender, genderOptions } from '@/types/user';
+import { CreateUserDto } from '@/dto/user.dto';
 import { createUser } from '@/services/userService';
 import Modal from '@/components/modal';
 import { hasCorrectEmailFormat } from '@/lib/utils';
 
 export default function App() {
-    const [formData, setFormData] = useState<RegisterUserFormData>({
+    const [formData, setFormData] = useState<CreateUserDto>({
         username: '',
         email: '',
         firstName: '',
         lastName: '',
-        gender: '',
+        gender: '' as Gender,
         phoneNumber: '',
         country: '',
         password: ''

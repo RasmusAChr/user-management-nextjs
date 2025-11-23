@@ -11,14 +11,3 @@ export const genderOptions = [
     { value: Gender.OTHER, label: 'Other' },
     { value: Gender.UNSPECIFIED, label: 'Prefer not to say' }
 ];
-
-export interface RegisterUserFormData {
-    username: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    gender: string;
-    phoneNumber: string;
-    country: string;
-    password: string;
-}

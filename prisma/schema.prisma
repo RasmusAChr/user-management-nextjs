@@ -59,7 +59,7 @@ model User {
 
   /// Tracking
   createdAt DateTime  @default(now())
-  // updatedAt DateTime  @updatedAt
+  updatedAt DateTime  @default(now()) @updatedAt
   // lastSeen  DateTime?
   // isOnline  Boolean?
   // status    Status    @default(ACTIVE)
