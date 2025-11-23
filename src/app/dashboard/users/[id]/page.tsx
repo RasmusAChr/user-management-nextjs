@@ -144,6 +144,10 @@ export default function UserDetailPage() {
                                     Last Updated
                                 </label>
                                 <p className="text-gray-900">
+                                    {(() => {
+                                        console.log('User updatedAt:', user);
+                                        return null;
+                                    })()}
                                     {new Date(user.updatedAt).toLocaleString()}
                                 </p>
                             </div>

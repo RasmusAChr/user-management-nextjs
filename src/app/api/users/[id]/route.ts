@@ -19,11 +19,12 @@ function toUserResponseDto(user: any): UserResponseDto {
 
 // Get a single user by ID
 export async function GET(
-    request: Request,
-    { params }: { params: { id: string } }
+    _request: Request,
+    { params }: { params: any }
 ) {
     try {
-        const userId = parseInt(params.id, 10);
+        const resolvedParams = await params;
+        const userId = parseInt(resolvedParams.id, 10);
         
         if (isNaN(userId)) {
             return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
@@ -32,6 +33,8 @@ export async function GET(
         const user = await prisma.user.findUnique({
             where: { id: userId }
         });
+
+        console.log('User fetched:', user);
 
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -46,11 +49,12 @@ export async function GET(
 
 // Delete a user by ID
 export async function DELETE(
-    request: Request,
-    { params }: { params: { id: string } }
+    _request: Request,
+    { params }: { params: any }
 ) {
     try {
-        const userId = parseInt(params.id, 10);
+        const resolvedParams = await params;
+        const userId = parseInt(resolvedParams.id, 10);
         
         if (isNaN(userId)) {
             return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
@@ -78,10 +82,11 @@ export async function DELETE(
 // Update a user by ID
 export async function PATCH(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: any }
 ) {
     try {
-        const userId = parseInt(params.id, 10);
+        const resolvedParams = await params;
+        const userId = parseInt(resolvedParams.id, 10);
         
         if (isNaN(userId)) {
             return NextResponse.json({ error: 'Invalid user ID' }, { status: 400 });
