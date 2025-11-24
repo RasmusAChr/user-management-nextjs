@@ -45,7 +45,7 @@ export default function App() {
         if (!isFormValid) return;
         
         try {
-            const created = await createUser(formData);
+            await createUser(formData);
             setModalConfig({
                 title: 'Successfully Created User',
                 description: 'The user has been created successfully and added to the system.',

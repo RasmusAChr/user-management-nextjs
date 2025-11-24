@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { UpdateUserDto, UserResponseDto } from '@/dto/user.dto';
 import { Gender } from '@/types/user';
 import countries from '@/data/countries.json';
+import { updateUser } from '@/services/userService';
 
 export default function UserDetailPage() {
     const params = useParams();
@@ -78,6 +79,20 @@ export default function UserDetailPage() {
     const handleEdit = async () => {
         await loadEditingFields();
         setIsEditing(true);
+    }
+
+    const handleSaveEdit = async () => {
+        try {
+            const updatedUser = await updateUser(parseInt(userId, 10), formData);
+            setUser(updatedUser);
+            setIsEditing(false);
+        } catch (error: any) {
+            alert(error.message);
+        }
+    }
+
+    const handleCancelEdit = () => {
+        setIsEditing(false);
     }
 
     const handleDelete = async () => {
@@ -271,18 +286,45 @@ export default function UserDetailPage() {
 
                     {/* Actions Section */}
                     <div className="px-8 py-6 bg-gray-50 border-t border-gray-200 flex flex-wrap gap-4">
+                        { isEditing ? (
+                        <>
+                        <button 
+                            onClick={handleSaveEdit}
+                            className="bg-green-900 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-green-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                        >
+                            Save
+                        </button>
+                        </>
+                        ) : (
+                        <>
                         <button 
                             onClick={handleEdit}
                             className="bg-gray-900 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
                         >
-                            Edit User
+                            Edit
                         </button>
+                        
+                        </>
+                        ) }
+                        { isEditing ? (
+                        <>
+                        <button 
+                            onClick={handleCancelEdit}
+                            className="bg-red-900 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-red-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                        >
+                            Cancel
+                        </button>
+                        </>
+                        ) : (
+                        <>
                         <button
                             onClick={handleDelete}
                             className="bg-red-600 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-red-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
                         >
                             Delete User
                         </button>
+                        </>
+                    ) }
                     </div>
                 </div>
             </div>
