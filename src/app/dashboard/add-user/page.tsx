@@ -52,6 +52,17 @@ export default function App() {
                 type: 'success'
             });
             setIsModalOpen(true);
+            // Reset form
+            setFormData({
+                username: '',
+                email: '',
+                firstName: '',
+                lastName: '',
+                gender: '' as Gender,
+                phoneNumber: '',
+                country: '',
+                password: ''
+            });
         } catch (error: any) {
             console.error('Error creating user:', error);
             setModalConfig({

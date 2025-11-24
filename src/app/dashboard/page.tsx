@@ -62,11 +62,6 @@ export default function Dashboard() {
                         {users.length === 0 ? (
                             <div className="text-center py-12">
                                 <p className="text-gray-500 text-lg mb-4">No users found</p>
-                                <Link href="/dashboard/add-user">
-                                    <button className="text-gray-900 underline hover:text-gray-700">
-                                        Create your first user
-                                    </button>
-                                </Link>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
