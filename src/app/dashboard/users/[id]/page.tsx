@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { UserResponseDto } from '@/dto/user.dto';
+import { UpdateUserDto, UserResponseDto } from '@/dto/user.dto';
+import { Gender } from '@/types/user';
+import countries from '@/data/countries.json';
 
 export default function UserDetailPage() {
     const params = useParams();
@@ -13,6 +15,27 @@ export default function UserDetailPage() {
     const [user, setUser] = useState<UserResponseDto | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+
+    // For editing
+    const [formData, setFormData] = useState<UpdateUserDto>({
+            username: '',
+            email: '',
+            firstName: '',
+            lastName: '',
+            gender: '' as Gender,
+            phoneNumber: '',
+            country: ''
+        });
+
+    // When editing fields
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
 
     useEffect(() => {
         loadUser();
@@ -33,6 +56,29 @@ export default function UserDetailPage() {
             setLoading(false);
         }
     };
+
+    const loadEditingFields = async () => {
+        try {
+            if (user) {
+                setFormData({
+                    username: user.username,
+                    email: user.email,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    gender: user.gender,
+                    phoneNumber: user.phoneNumber,
+                    country: user.country
+                });
+            }
+        } catch (err: any) {
+            alert(err.message || 'Failed to load editing fields');
+        }
+    }
+
+    const handleEdit = async () => {
+        await loadEditingFields();
+        setIsEditing(true);
+    }
 
     const handleDelete = async () => {
         if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
@@ -111,25 +157,94 @@ export default function UserDetailPage() {
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Email
                                 </label>
-                                <p className="text-gray-900">{user.email}</p>
+                                { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter email"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.email}</p>
+                                    </>
+                                ) }
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Phone Number
                                 </label>
-                                <p className="text-gray-900">{user.phoneNumber}</p>
+                                    { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={formData.phoneNumber}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter phone number"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.phoneNumber}</p>
+                                    </>
+                                ) }
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Gender
                                 </label>
-                                <p className="text-gray-900 capitalize">{user.gender}</p>
+                                    { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="gender"
+                                    value={formData.gender}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter gender"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900 capitalize">{user.gender}</p>
+                                    </>
+                                ) }
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Country
                                 </label>
-                                <p className="text-gray-900">{user.country}</p>
+                                { isEditing ? (
+                                    <>
+                                    <select
+                                        name="country"
+                                        value={formData.country}
+                                        onChange={handleInputChange}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 bg-white text-gray-900 placeholder-gray-500"
+                                        required
+                                        >
+                                        <option value="">Select country</option>
+                                        {countries.map((country: { code: string; name: string }) => (
+                                            <option key={country.code} value={country.code}>
+                                                {country.name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.country}</p>
+                                    </>
+                                ) }
                             </div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
@@ -156,11 +271,12 @@ export default function UserDetailPage() {
 
                     {/* Actions Section */}
                     <div className="px-8 py-6 bg-gray-50 border-t border-gray-200 flex flex-wrap gap-4">
-                        <Link href={`/dashboard/users/${user.id}/edit`}>
-                            <button className="bg-gray-900 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
-                                Edit User
-                            </button>
-                        </Link>
+                        <button 
+                            onClick={handleEdit}
+                            className="bg-gray-900 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+                        >
+                            Edit User
+                        </button>
                         <button
                             onClick={handleDelete}
                             className="bg-red-600 text-white py-2 px-6 rounded-xl font-medium transition-all duration-200 hover:bg-red-700 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"

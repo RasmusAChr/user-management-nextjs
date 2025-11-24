@@ -9,6 +9,7 @@ export default function Dashboard() {
     const [users, setUsers] = useState<UserResponseDto[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         loadUsers();
