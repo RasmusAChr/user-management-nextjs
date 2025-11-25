@@ -83,6 +83,16 @@ export default function UserDetailPage() {
 
     const handleSaveEdit = async () => {
         try {
+            // If data is not changed, do nothing
+            if (user &&
+                formData.email === user.email &&
+                formData.phoneNumber === user.phoneNumber &&
+                formData.gender === user.gender &&
+                formData.country === user.country) {
+                setIsEditing(false);
+                return;
+            }
+
             const updatedUser = await updateUser(parseInt(userId, 10), formData);
             setUser(updatedUser);
             setIsEditing(false);
