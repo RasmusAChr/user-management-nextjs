@@ -180,6 +180,74 @@ export default function UserDetailPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                                    First Name
+                                </label>
+                                { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="firstName"
+                                    value={formData.firstName}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter first name"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.firstName}</p>
+                                    </>
+                                ) }
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                                    Last Name
+                                </label>
+                                { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="lastName"
+                                    value={formData.lastName}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter last name"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.lastName}</p>
+                                    </>
+                                ) }
+                            </div>
+                            <div></div>
+                            <div></div>
+                            <div>
+                                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                                    Username
+                                </label>
+                                { isEditing ? (
+                                    <>
+                                    <input
+                                    type="text"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500"
+                                    placeholder="Enter username"
+                                    required
+                                    />
+                                    </>
+                                    ) : (
+                                    <>
+                                    <p className="text-gray-900">{user.username}</p>
+                                    </>
+                                ) }
+                            </div>
+                            <div>
+                                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Email
                                 </label>
                                 { isEditing ? (
@@ -271,6 +339,9 @@ export default function UserDetailPage() {
                                     </>
                                 ) }
                             </div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                             <div>
                                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
                                     Created At
